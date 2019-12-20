@@ -62,6 +62,30 @@ namespace Generalized_Async_Return_Types
           }
           */
         //The async method returning Task
+        /*  public static void Main()
+          {
+              DisplayCurrentInfo().Wait();
+              Console.WriteLine("Press any key to exist.");
+              Console.ReadKey();
+          }
+          static async Task DisplayCurrentInfo()
+          {
+              await WaitAndApologize();
+              Console.WriteLine($"Today is {DateTime.Now:D}");
+              Console.WriteLine($"The current time is {DateTime.Now.TimeOfDay:t}");
+              Console.WriteLine("The current temperature is 76 degrees.");
+          }
+          static async Task WaitAndApologize()
+          {
+              // Task.Delay is a placeholder for actual work.  
+              await Task.Delay(2000);
+              // Task.Delay delays the following line by two seconds.  
+              Console.WriteLine("\nSorry for the delay. . . .\n");
+          }
+          */
+        //example 3
+
+        //separates calling the WaitAndApologize method from awaiting the task that the method returns.
         public static void Main()
         {
             DisplayCurrentInfo().Wait();
@@ -70,10 +94,12 @@ namespace Generalized_Async_Return_Types
         }
         static async Task DisplayCurrentInfo()
         {
-            await WaitAndApologize();
-            Console.WriteLine($"Today is {DateTime.Now:D}");
-            Console.WriteLine($"The current time is {DateTime.Now.TimeOfDay:t}");
-            Console.WriteLine("The current temperature is 76 degrees.");
+            Task wait = WaitAndApologize();
+            string output = $"Today is {DateTime.Now:D}\n" +
+                            $"The current time is {DateTime.Now.TimeOfDay:t}\n" +
+                            $"The current temperature is 76 degrees.\n";
+            await wait;
+            Console.WriteLine(output);
         }
         static async Task WaitAndApologize()
         {
@@ -82,6 +108,7 @@ namespace Generalized_Async_Return_Types
             // Task.Delay delays the following line by two seconds.  
             Console.WriteLine("\nSorry for the delay. . . .\n");
         }
+
     }
 
 }
