@@ -86,7 +86,7 @@ namespace Generalized_Async_Return_Types
         //example 3
 
         //separates calling the WaitAndApologize method from awaiting the task that the method returns.
-        public static void Main()
+        /*public static void Main()
         {
             DisplayCurrentInfo().Wait();
             Console.WriteLine("Press any key to exist.");
@@ -108,7 +108,55 @@ namespace Generalized_Async_Return_Types
             // Task.Delay delays the following line by two seconds.  
             Console.WriteLine("\nSorry for the delay. . . .\n");
         }
+        */
 
+        //Async method returning void
+
+        public static void Main()
+        {
+            RunCounter().Wait();
+            Console.WriteLine("Press any key to exist.");
+            Console.ReadKey();
+        }
+        private static async Task RunCounter()
+        {
+            var count = new Counter(5);
+            await count.StartCounting(8);
+        }
     }
-
+    public class Counter
+    {
+        private int threshold = 0;
+        private int iterations = 0;
+        private int ctr = 0;
+        event EventHandler<EventArgs> ThresholdReached;
+        public Counter(int threshold)
+        {
+            this.threshold = threshold;
+            ThresholdReached += thresholdReachedEvent;
+        }
+        public async Task<int> StartCounting(int limit)
+        {
+            iterations = 1;
+            for (int index = 0; index <= limit; index++)
+            {
+                if (ctr == threshold)
+                    thresholdReachedEvent(this, EventArgs.Empty);
+                ctr++;
+                await Task.Delay(500);
+            }
+            int retval = ctr + (iterations - 1) * threshold;
+            Console.WriteLine($"On iteration {iterations}, reached {limit}");
+            return retval;
+        }
+        async void thresholdReachedEvent(object sender, EventArgs e)
+        {
+            Console.WriteLine($"Reached {ctr}. Resetting...");
+            await Task.Delay(1000);
+            ctr = 0;
+            iterations++;
+        }
+    }
 }
+
+
