@@ -111,7 +111,7 @@ namespace Generalized_Async_Return_Types
         */
 
         //Async method returning void
-
+        /*
         public static void Main()
         {
             RunCounter().Wait();
@@ -156,6 +156,37 @@ namespace Generalized_Async_Return_Types
             ctr = 0;
             iterations++;
         }
+        */
+
+        //Understanding the Generalized Async Return Types in C#
+        public static void Main()
+        {
+            Console.WriteLine(ShowTodaysInfo().Result);
+            Console.WriteLine("Press any key to exist.");
+            Console.ReadKey();
+        }
+        private static async ValueTask<string> ShowTodaysInfo()
+        {
+            var infoTask = GetLeisureHours();
+            // You can do other work that does not rely on integerTask before awaiting.
+            string ret = $"Today is {DateTime.Today:D}\n" +
+                         "Today's hours of leisure: " +
+                         $"{await infoTask}";
+            return ret;
+        }
+        static async ValueTask<int> GetLeisureHours()
+        {
+            // Task.FromResult is a placeholder for actual work that returns a string.  
+            var today = await Task.FromResult<string>(DateTime.Now.DayOfWeek.ToString());
+            // The method then can process the result in some way.  
+            int leisureHours;
+            if (today.First() == 'S')
+                leisureHours = 16;
+            else
+                leisureHours = 5;
+            return leisureHours;
+        }
+
     }
 }
 
